@@ -1,0 +1,46 @@
+name: dbt CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'models/**'
+      - 'macros/**'
+      - 'tests/**'
+      - 'seeds/**'
+      - 'dbt_project.yml'
+      - 'packages.yml'
+
+jobs:
+  prd-check:
+    name: PRD Linked
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify PRD reference in new mart models
+        run: |
+          NEW_MARTS=$(git diff --name-only --diff-filter=A origin/main...HEAD \
+            -- 'models/marts/**/*.sql')
+
+          if [ -z "$NEW_MARTS" ]; then
+            echo "No new mart models. Skipping PRD check."
+            exit 0
+          fi
+
+          echo "New mart models found:"
+          echo "$NEW_MARTS"
+
+          MISSING_PRD=false
+          for f in $NEW_MARTS; do
+            if ! grep -qi "PRD:" "$f"; then
+              echo "::error::$f is missing a PRD reference in its SQL header."
+              MISSING_PRD=true
+            else
+              echo "$f has a PRD reference."
+            fi
+          done
+
+          if [ "$MISSING_PRD" = true ]; then
+            exit 1
+          fi

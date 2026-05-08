@@ -1,0 +1,17 @@
+# profiles.yml.example
+# Copy to ~/.dbt/profiles.yml and fill in your Snowflake credentials.
+# NEVER commit your real profiles.yml to git.
+
+olist_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: <your_account_locator>
+      user: <your_username>
+      password: <your_password>
+      role: DBT_ROLE
+      warehouse: DBT_WH
+      database: OLIST_ANALYTICS
+      schema: DEV_<your_name>
+      threads: 4
