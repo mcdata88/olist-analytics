@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: mart_customer_segmentation
+    description: >
+      Customer-level lifetime metrics and behavioral segments.
+      PRD: docs/prds/mart_customer_segmentation.md | Issue: #58
+    columns:
+      - name: customer_unique_id
+        description: Primary key. Deduplicated customer identifier.
+        tests:
+          - unique
+          - not_null
+
+      - name: lifetime_orders
+        description: Total delivered orders placed.
+
+      - name: customer_segment
+        tests:
+          - accepted_values:
+              values: ['champion', 'loyal', 'at_risk', 'new', 'one_and_done']
+
+      - name: is_repeat_buyer
+        tests:
+          - not_null

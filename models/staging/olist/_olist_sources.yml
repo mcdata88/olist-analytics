@@ -1,0 +1,60 @@
+version: 2
+
+sources:
+  - name: raw_olist
+    description: >
+      Raw Olist Brazilian E-Commerce data loaded from Kaggle CSVs.
+      Source: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+    database: OLIST_ANALYTICS
+    schema: RAW_OLIST
+    tables:
+      - name: orders
+        description: Order-level data with status and timestamps.
+        loaded_at_field: order_purchase_timestamp
+        freshness:
+          warn_after: { count: 36, period: hour }
+          error_after: { count: 72, period: hour }
+        columns:
+          - name: order_id
+            tests: [unique, not_null]
+
+      - name: order_items
+        description: Line items per order with price and freight.
+        columns:
+          - name: order_id
+            tests: [not_null]
+          - name: order_item_id
+            tests: [not_null]
+
+      - name: order_payments
+        description: Payment installments per order.
+        columns:
+          - name: order_id
+            tests: [not_null]
+
+      - name: order_reviews
+        description: Customer reviews posted after delivery.
+        columns:
+          - name: review_id
+            tests: [not_null]
+
+      - name: customers
+        description: Customer profiles with location.
+        columns:
+          - name: customer_id
+            tests: [unique, not_null]
+
+      - name: products
+        description: Product catalog with category and dimensions.
+        columns:
+          - name: product_id
+            tests: [unique, not_null]
+
+      - name: sellers
+        description: Seller profiles with location.
+        columns:
+          - name: seller_id
+            tests: [unique, not_null]
+
+      - name: geolocation
+        description: Zip code prefix to lat/long mapping.

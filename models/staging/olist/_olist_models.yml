@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: stg_olist__orders
+    description: Cleaned order headers. One row per order.
+    columns:
+      - name: order_id
+        description: Primary key.
+        tests: [unique, not_null]
+      - name: customer_id
+        tests: [not_null]
+      - name: order_status
+        tests:
+          - accepted_values:
+              values: ['created', 'approved', 'invoiced', 'processing',
+                       'shipped', 'delivered', 'unavailable', 'canceled']
+
+  - name: stg_olist__order_items
+    description: Order line items with price and freight. One row per order + item.
+    columns:
+      - name: order_id
+        tests: [not_null]
+
+  - name: stg_olist__order_payments
+    description: Payment records per order. One row per payment sequential.
+    columns:
+      - name: order_id
+        tests: [not_null]
+
+  - name: stg_olist__customers
+    description: Customer profiles. One row per customer_id.
+    columns:
+      - name: customer_id
+        tests: [unique, not_null]
+      - name: customer_unique_id
+        tests: [not_null]
+
+  - name: stg_olist__order_reviews
+    description: Post-delivery reviews. One row per review.
+    columns:
+      - name: review_id
+        tests: [unique, not_null]
+      - name: review_score
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
