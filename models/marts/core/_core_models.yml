@@ -25,6 +25,26 @@ models:
         tests:
           - not_null
 
+  - name: fct_order_items
+    description: >
+      Atomic fact table at order-item grain. Foundation for all dimensional reporting.
+      PRD: docs/prds/fct_order_items.md | Issue: #89
+    columns:
+      - name: order_item_sk
+        description: Surrogate primary key (order_id + order_item_id).
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        tests:
+          - not_null
+      - name: item_price
+        tests:
+          - not_null
+      - name: is_delivered
+        tests:
+          - not_null
+
   - name: mart_seller_performance
     description: >
       Seller-level performance metrics including GMV, on-time delivery rate, and review scores.
