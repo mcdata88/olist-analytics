@@ -12,8 +12,9 @@ models:
       - name: order_status
         tests:
           - accepted_values:
-              values: ['created', 'approved', 'invoiced', 'processing',
-                       'shipped', 'delivered', 'unavailable', 'canceled']
+              arguments:
+                values: ['created', 'approved', 'invoiced', 'processing',
+                         'shipped', 'delivered', 'unavailable', 'canceled']
 
   - name: stg_olist__order_items
     description: Order line items with price and freight. One row per order + item.
@@ -43,7 +44,8 @@ models:
       - name: review_score
         tests:
           - accepted_values:
-              values: [1, 2, 3, 4, 5]
+              arguments:
+                values: [1, 2, 3, 4, 5]
 
   - name: stg_olist__sellers
     description: Seller profiles with location. One row per seller_id.

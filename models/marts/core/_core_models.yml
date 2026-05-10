@@ -49,4 +49,5 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['platinum', 'gold', 'silver', 'bronze']
+              arguments:
+                values: ['platinum', 'gold', 'silver', 'bronze']

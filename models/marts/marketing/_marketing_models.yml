@@ -18,7 +18,8 @@ models:
       - name: customer_segment
         tests:
           - accepted_values:
-              values: ['champion', 'loyal', 'at_risk', 'new', 'one_and_done']
+              arguments:
+                values: ['champion', 'loyal', 'at_risk', 'new', 'one_and_done']
 
       - name: is_repeat_buyer
         tests:
