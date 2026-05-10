@@ -44,3 +44,9 @@ models:
         tests:
           - accepted_values:
               values: [1, 2, 3, 4, 5]
+
+  - name: stg_olist__sellers
+    description: Seller profiles with location. One row per seller_id.
+    columns:
+      - name: seller_id
+        tests: [unique, not_null]

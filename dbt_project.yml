@@ -43,3 +43,10 @@ models:
         +schema: core
       marketing:
         +schema: marketing
+
+vars:
+  seller_tier_thresholds:
+    - {min_value: 50000, label: platinum}
+    - {min_value: 10000, label: gold}
+    - {min_value: 1000,  label: silver}
+    - {min_value: 0,     label: bronze}

@@ -24,3 +24,29 @@ models:
       - name: order_status
         tests:
           - not_null
+
+  - name: mart_seller_performance
+    description: >
+      Seller-level performance metrics including GMV, on-time delivery rate, and review scores.
+      PRD: docs/prds/mart_seller_performance.md | Issue: #72
+    columns:
+      - name: seller_id
+        description: Primary key. One row per seller.
+        tests:
+          - unique
+          - not_null
+
+      - name: total_gmv
+        description: Gross revenue from this seller's items.
+        tests:
+          - not_null
+
+      - name: on_time_delivery_rate
+        description: Share of delivered orders that arrived on or before the estimated date.
+
+      - name: seller_tier
+        description: Performance tier derived from total GMV via classify_tier macro.
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['platinum', 'gold', 'silver', 'bronze']
