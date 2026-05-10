@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: mart_order_revenue
+    description: >
+      Single source of truth for order-level revenue.
+      PRD: docs/prds/mart_order_revenue.md | Issue: #42
+    columns:
+      - name: order_id
+        description: Primary key. One row per order.
+        tests:
+          - unique
+          - not_null
+
+      - name: total_item_revenue
+        description: Sum of product prices for the order.
+
+      - name: total_freight
+        description: Sum of freight charges.
+
+      - name: total_payment
+        description: Actual amount paid.
+
+      - name: order_status
+        tests:
+          - not_null

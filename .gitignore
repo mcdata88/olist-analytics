@@ -8,3 +8,4 @@ venv/
 *.pyc
 __pycache__/
 .env
+dbt_internal_packages/
