@@ -92,9 +92,9 @@ it has changed.
 ## 8. SLA / Freshness
 
 - **Run cadence:** Daily, after `dbt build` completes
-- **Command:** `dbt snapshot --select snp_orders__status`
-- **Note:** Snapshots run separately from `dbt build` — they must be scheduled
-  as a distinct step in the pipeline
+- **Command:** `dbt build` (snapshots are included) or `dbt snapshot --select snp_orders__status` to run in isolation
+- **Note:** In production pipelines, snapshots are typically scheduled before
+  `dbt build` so they capture raw source state before any transformations run
 
 ## 9. Open Questions / Risks
 
