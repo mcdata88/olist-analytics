@@ -44,6 +44,10 @@ models:
       marketing:
         +schema: marketing
 
+snapshots:
+  olist_analytics:
+    +target_schema: snapshots
+
 vars:
   seller_tier_thresholds:
     - {min_value: 50000, label: platinum}
