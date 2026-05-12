@@ -7,17 +7,19 @@ workflow with GitHub CI/CD, reusable Jinja macros, and dimensional modeling.
 
 ## Architecture
 
-    RAW_OLIST (9 tables)
-        │
-        ▼
-    STAGING (6 views) ──── Clean, rename, cast. No business logic.
-        │
-        ▼
+    RAW_OLIST (9 tables)         SEEDS (1 file)
+             │                        │
+             └──────────┬─────────────┘
+                        ▼
+    STAGING (8 views) ──── Clean, rename, cast. No business logic.
+                        │
+                        ▼
     INTERMEDIATE (2 views) ──── Reusable aggregations shared across marts.
-        │
-        ▼
+                        │
+                        ▼
     MARTS
     ├── CORE
+    │   ├── dim_products ─────────────── Product dimension with English categories
     │   ├── fct_order_items ──────────── Atomic fact table (order × item grain)
     │   ├── mart_order_revenue ────────── Single source of truth for order revenue
     │   └── mart_seller_performance ───── Seller GMV, delivery rates, and tiers
@@ -34,8 +36,10 @@ See `docs/prds/` for live examples:
 
 | PRD | Issue | Status |
 |---|---|---|
-| [fct_order_items](docs/prds/fct_order_items.md) | #89 | Draft |
-| [mart_seller_performance](docs/prds/mart_seller_performance.md) | #72 | Draft |
+| [dim_products](docs/prds/dim_products.md) | #94 | Implemented |
+| [snp_orders__status](docs/prds/snp_orders__status.md) | #91 | Implemented |
+| [fct_order_items](docs/prds/fct_order_items.md) | #89 | Implemented |
+| [mart_seller_performance](docs/prds/mart_seller_performance.md) | #72 | Implemented |
 | [mart_order_revenue](docs/prds/mart_order_revenue.md) | #42 | Approved |
 | [mart_customer_segmentation](docs/prds/mart_customer_segmentation.md) | #58 | Approved |
 
@@ -75,6 +79,8 @@ into `RAW_OLIST`.
     ├── setup/snowflake_setup.sql        # Snowflake DDL
     ├── docs/prds/                       # PRDs — start here before writing SQL
     │   ├── TEMPLATE.md
+    │   ├── dim_products.md
+    │   ├── snp_orders__status.md
     │   ├── fct_order_items.md
     │   ├── mart_order_revenue.md
     │   ├── mart_customer_segmentation.md
@@ -82,12 +88,18 @@ into `RAW_OLIST`.
     ├── macros/
     │   ├── classify_tier.sql            # Configurable tier labeling
     │   └── safe_divide.sql             # Null-safe division
+    ├── seeds/
+    │   └── product_category_name_translation.csv  # Portuguese → English category names
+    ├── snapshots/
+    │   └── snp_orders__status.sql       # Tracks order status changes over time
+    ├── analyses/
+    │   └── customer_order_dates.sql     # date_spine exploration (dbt_utils)
     ├── models/
-    │   ├── staging/olist/               # 6 views — 1:1 with raw sources
+    │   ├── staging/olist/               # 8 views — 1:1 with raw sources
     │   ├── intermediate/                # 2 views — reusable aggregations
     │   └── marts/
-    │       ├── core/                    # fct_order_items, mart_order_revenue,
-    │       │                            # mart_seller_performance
+    │       ├── core/                    # dim_products, fct_order_items,
+    │       │                            # mart_order_revenue, mart_seller_performance
     │       └── marketing/               # mart_customer_segmentation
     ├── .github/
     │   ├── ISSUE_TEMPLATE/              # Forces PRD before work begins

@@ -1,7 +1,7 @@
 # PRD: Product Dimension (dim_products)
 
 **Author:** Admin
-**Status:** Draft
+**Status:** Implemented
 **Created:** 2026-05-12
 **Last Updated:** 2026-05-12
 **Linked Issue:** #94
@@ -28,10 +28,11 @@ BI-ready product dimension that any mart or analysis can join to via `product_id
 | Source Table | Description | Grain | Refresh Cadence |
 |---|---|---|---|
 | `raw_olist.products` | Product catalog with physical dimensions | 1 row per product | Static |
-| `raw_olist.product_category_name_translation` | Portuguese → English category name mapping | 1 row per category | Static |
+| `seeds/product_category_name_translation.csv` | Portuguese → English category name mapping | 1 row per category | Static (version-controlled seed) |
 
-> **New source required:** `product_category_name_translation` is not yet declared
-> in `_olist_sources.yml`. It must be added before staging models can reference it.
+> **Implementation note:** The translation table is managed as a **dbt seed** rather
+> than a raw Snowflake table. It is version-controlled in `seeds/` and loaded via
+> `dbt build`. The staging model references it with `{{ ref('product_category_name_translation') }}`.
 
 > **Note:** ~600 products have a null `product_category_name`. These are left-joined
 > to the translation table and assigned `'uncategorized'` as the English category name.
@@ -44,7 +45,7 @@ the established staging-first workflow.
 | Model | Source | Purpose |
 |---|---|---|
 | `stg_olist__products` | `raw_olist.products` | Clean and rename product catalog columns |
-| `stg_olist__product_category_translations` | `raw_olist.product_category_name_translation` | Rename translation columns |
+| `stg_olist__product_category_translations` | `seeds/product_category_name_translation` via `ref()` | Rename translation columns |
 
 ## 4. Output Specification
 
@@ -81,11 +82,11 @@ Metrics are computed by joining this table to `fct_order_items`:
 
 ## 6. Acceptance Criteria
 
-- [ ] `product_id` is unique and not null
-- [ ] Row count matches `COUNT(DISTINCT product_id)` from `raw_olist.products`
-- [ ] `product_category_name_en` is never null (nulls replaced with `'uncategorized'`)
-- [ ] `product_volume_cm3` is null only where any dimension (length, height, width) is null
-- [ ] `product_volume_cm3 > 0` for all non-null rows
+- [x] `product_id` is unique and not null
+- [x] Row count matches `COUNT(DISTINCT product_id)` from `raw_olist.products`
+- [x] `product_category_name_en` is never null (nulls replaced with `'uncategorized'`)
+- [x] `product_volume_cm3` is null only where any dimension (length, height, width) is null
+- [x] `product_volume_cm3 > 0` for all non-null rows
 - [ ] All `product_id` values in `fct_order_items` resolve to a row in `dim_products`
 
 ## 7. Downstream Consumers
