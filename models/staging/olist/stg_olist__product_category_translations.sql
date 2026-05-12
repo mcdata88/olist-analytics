@@ -2,7 +2,7 @@
 -- PRD: Foundation for dim_products (#94)
 
 with source as (
-    select * from {{ source('raw_olist', 'product_category_name_translation') }}
+    select * from {{ ref('product_category_name_translation') }}
 ),
 
 renamed as (

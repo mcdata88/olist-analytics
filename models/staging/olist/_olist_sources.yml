@@ -55,5 +55,3 @@ sources:
       - name: geolocation
         description: Zip code prefix to lat/long mapping.
 
-      - name: product_category_name_translation
-        description: Maps Portuguese product category names to English.
