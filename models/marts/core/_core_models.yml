@@ -25,6 +25,21 @@ models:
         tests:
           - not_null
 
+  - name: dim_products
+    description: >
+      Product dimension with English category names and physical dimensions.
+      PRD: docs/prds/dim_products.md | Issue: #94
+    columns:
+      - name: product_id
+        description: Primary key. One row per product.
+        tests:
+          - unique
+          - not_null
+      - name: product_category_name_en
+        description: English category name. 'uncategorized' where source category is null.
+        tests:
+          - not_null
+
   - name: fct_order_items
     description: >
       Atomic fact table at order-item grain. Foundation for all dimensional reporting.

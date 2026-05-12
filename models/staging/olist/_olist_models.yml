@@ -52,3 +52,15 @@ models:
     columns:
       - name: seller_id
         tests: [unique, not_null]
+
+  - name: stg_olist__products
+    description: Product catalog with physical dimensions. One row per product_id.
+    columns:
+      - name: product_id
+        tests: [unique, not_null]
+
+  - name: stg_olist__product_category_translations
+    description: Portuguese to English product category name mapping. One row per category.
+    columns:
+      - name: product_category_name_pt
+        tests: [unique, not_null]
